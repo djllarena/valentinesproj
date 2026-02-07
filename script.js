@@ -39,10 +39,10 @@ function sayYes() {
   document.getElementById('card').classList.add('hidden');
   document.getElementById('yesCard').classList.remove('hidden');
   
-  // Stop confetti after 5 seconds
+  // Stop confetti after 10 seconds
   setTimeout(() => {
     clearInterval(confettiInterval);
-  }, 5000);
+  }, 10000);
 }
 
 function moveNo() {
@@ -102,7 +102,24 @@ function moveNo() {
 }
 
 function makeYesBigger() {
-  yesScale += 0.2;
+  yesScale *= 1.5;
   const yesBtn = document.getElementById('yesBtn');
-  yesBtn.style.transform = `scale(${yesScale})`;
+  
+  let rotation = 0;
+  let translateX = 0;
+  let translateY = 0;
+  
+  if (noClickCount === 5) {
+    rotation = 45;
+  } else if (noClickCount >= 6) {
+    rotation = 90;
+    // Move to center
+    const card = document.getElementById('card');
+    const buttonRect = yesBtn.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    translateX = (cardRect.left + cardRect.width / 2) - (buttonRect.left + buttonRect.width / 2);
+    translateY = (cardRect.top + cardRect.height / 2) - (buttonRect.top + buttonRect.height / 2);
+  }
+  
+  yesBtn.style.transform = `translate(${translateX}px, ${translateY}px) scale(${yesScale}) rotate(${rotation}deg)`;
 }
