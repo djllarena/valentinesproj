@@ -56,21 +56,26 @@ function moveNo() {
   const btnHeight = noBtn.offsetHeight;
   
   // Calculate safe bounds (keep button fully visible within card)
-  const padding = 20;
+  const padding = 10;
   const maxX = (cardWidth / 2) - (btnWidth / 2) - padding;
   const maxY = (cardHeight / 2) - (btnHeight / 2) - padding;
   const minX = -(cardWidth / 2) + (btnWidth / 2) + padding;
   const minY = -(cardHeight / 2) + (btnHeight / 2) + padding;
   
+  // Reduce movement distance on small screens
+  const isSmallScreen = window.innerWidth < 600;
+  const maxDistance = isSmallScreen ? 60 : 120;
+  const minDistance = isSmallScreen ? 40 : 80;
+  
   let x, y;
-  const minMovement = 80;
+  const minMovement = minDistance;
   let movementDistance = 0;
   let attempts = 0;
   const maxAttempts = 20;
   
   // Keep generating new positions until we move far enough and stay in bounds
   while (movementDistance < minMovement && attempts < maxAttempts) {
-    const distance = 120 + Math.random() * 80;
+    const distance = minDistance + Math.random() * (maxDistance - minDistance);
     const angle = Math.random() * Math.PI * 2;
     x = Math.cos(angle) * distance;
     y = Math.sin(angle) * distance;
